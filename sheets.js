@@ -1,7 +1,7 @@
 window.PROJECT_SHEETS = [
   {
     name: "Proyecto HCI",
-    area: "Infraesctructura",
+    area: "Redes y Telecomunicaciones",
     owner: "GIT",
     status: "En seguimiento",
     priority: "Alta",
@@ -11,7 +11,7 @@ window.PROJECT_SHEETS = [
   },
   {
     name: "HCI Migración",
-    area: "Infraesctructura",
+    area: "Redes y Telecomunicaciones",
     owner: "GIT",
     status: "Activo",
     priority: "Alta",
@@ -21,8 +21,8 @@ window.PROJECT_SHEETS = [
   },
   {
     name: "Entrega de Computadoras",
-    area: "GIT",
-    owner: "Direccion de Informatica",
+    area: "Soporte Técnico",
+    owner: "GIT",
     status: "En seguimiento",
     priority: "Alta",
     description: "Control de entrega y distribución de Computadoras.",
@@ -31,7 +31,7 @@ window.PROJECT_SHEETS = [
   },
   {
     name: "Entrega de Teléfonos",
-    area: "Direccion de Informatica",
+    area: "Redes y Telecomunicaciones",
     owner: "GIT",
     status: "Activo",
     priority: "Media",
@@ -41,12 +41,22 @@ window.PROJECT_SHEETS = [
   },
     {
     name: "Inventario GLPI",
-    area: "Direccion de Informatica",
+    area: "Redes y Telecomunicaciones",
     owner: "GIT",
     status: "Activo",
     priority: "Alta",
     description: "Inventario de EndPoint Organismo Judicial",
     url: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=377348793",
     driveUrl: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=377348793"		   
+  },
+      {
+    name: "PEI 2026-2030",
+    area: "Todas las Coordinaciones",
+    owner: "GIT",
+    status: "Activo",
+    priority: "Alta",
+    description: "Control y seguimiento al Plan Estratégico Institucional 2026-2030",
+    url: "https://docs.google.com/spreadsheets/d/13Hq0jZPSQ9RleVysMj5BUZqwFNSicoAO4w-UUJ9vtrE/edit?gid=748289254#gid=748289254",
+    driveUrl: "https://docs.google.com/spreadsheets/d/13Hq0jZPSQ9RleVysMj5BUZqwFNSicoAO4w-UUJ9vtrE/edit?gid=748289254#gid=748289254"		   
   }
 ];
