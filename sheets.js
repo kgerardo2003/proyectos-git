@@ -46,7 +46,7 @@ window.PROJECT_SHEETS = [
     status: "Activo",
     priority: "Alta",
     description: "Inventario de EndPoint Organismo Judicial",
-    url: "https://docs.google.com/spreadsheets/d/1V4zPhZFLef3YeaJIelWNiiyOXt2PJV0pqkb0beWPoAE/edit?gid=377348793#gid=377348793",
-    driveUrl: "https://docs.google.com/spreadsheets/d/1V4zPhZFLef3YeaJIelWNiiyOXt2PJV0pqkb0beWPoAE/edit?gid=377348793#gid=377348793"
+    url: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=377348793",
+    driveUrl: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=3773487933"
   }
 ];
