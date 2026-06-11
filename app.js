@@ -45,6 +45,17 @@ function isValidUrl(url, expectedText) {
   return Boolean(url && url.includes(expectedText) && !url.endsWith("/...") && !url.endsWith("/"));
 }
 
+function getSheetPreviewUrl(url) {
+  if (!isValidUrl(url, "docs.google.com/spreadsheets")) return "";
+
+  const idMatch = url.match(/\/spreadsheets\/d\/([^/]+)/);
+  const gidMatch = url.match(/[?#&]gid=([0-9]+)/);
+  if (!idMatch) return "";
+
+  const gid = gidMatch ? `?gid=${gidMatch[1]}` : "";
+  return `https://docs.google.com/spreadsheets/d/${idMatch[1]}/preview${gid}`;
+}
+
 function renderMetrics() {
   const areas = uniqueValues("area");
   elements.totalBooks.textContent = sheets.length;
@@ -78,6 +89,18 @@ function renderProjects() {
 
   filtered.forEach((sheet) => {
     const card = document.createElement("article");
+    const previewUrl = getSheetPreviewUrl(sheet.url);
+    const preview = previewUrl
+      ? `
+        <div class="sheet-preview">
+          <iframe title="Vista previa de ${sheet.name}" src="${previewUrl}" loading="lazy"></iframe>
+        </div>
+      `
+      : `
+        <div class="sheet-preview unavailable">
+          <span>Vista previa pendiente</span>
+        </div>
+      `;
     const sheetLink = isValidUrl(sheet.url, "docs.google.com/spreadsheets")
       ? `<a class="open-link" href="${sheet.url}" target="_blank" rel="noreferrer">Abrir libro</a>`
       : `<button class="disabled-link" type="button" disabled>Libro pendiente</button>`;
@@ -95,6 +118,7 @@ function renderProjects() {
         <span class="badge ${priorityClass(sheet.priority)}">${sheet.priority}</span>
       </div>
       <p>${sheet.description}</p>
+      ${preview}
       <div class="card-footer">
         <span class="status">${sheet.status}</span>
         <div class="card-actions">
