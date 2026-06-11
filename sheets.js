@@ -14,7 +14,7 @@ window.PROJECT_SHEETS = [
     area: "Infraesctructura",
     owner: "GIT",
     status: "Activo",
-    priority: "Media",
+    priority: "Alta",
     description: "Control y seguimiento de Migración hacia el nuevo HCI",
     url: "https://docs.google.com/spreadsheets/d/1qeCPboRidHAZRLJ9X38U4mjLFuRzXmESwowkVBsLALI/edit?gid=572458247#gid=572458247",
     driveUrl: "https://docs.google.com/spreadsheets/d/1qeCPboRidHAZRLJ9X38U4mjLFuRzXmESwowkVBsLALI/edit?gid=572458247#gid=572458247"
@@ -34,7 +34,7 @@ window.PROJECT_SHEETS = [
     area: "Direccion de Informatica",
     owner: "GIT",
     status: "Activo",
-    priority: "Normal",
+    priority: "Media",
     description: "Reemplazo de Teléfonos",
     url: "https://docs.google.com/spreadsheets/d/1V4zPhZFLef3YeaJIelWNiiyOXt2PJV0pqkb0beWPoAE/edit?gid=377348793#gid=377348793",
     driveUrl: "https://docs.google.com/spreadsheets/d/1V4zPhZFLef3YeaJIelWNiiyOXt2PJV0pqkb0beWPoAE/edit?gid=377348793#gid=377348793"
@@ -47,6 +47,6 @@ window.PROJECT_SHEETS = [
     priority: "Alta",
     description: "Inventario de EndPoint Organismo Judicial",
     url: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=377348793",
-    driveUrl: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=3773487933"
+    driveUrl: "https://docs.google.com/spreadsheets/d/159YVs8D34FY7IOxbw23II8yvSAaRLnKW8dWLuTv0m84/edit?gid=377348793#gid=377348793"		   
   }
 ];
