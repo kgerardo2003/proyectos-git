@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tablero Gerencial de Proyectos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar" aria-label="Navegacion principal">
+      <div class="brand">
+        <div class="brand-logo">
+          <img
+            src="https://srp.gob.gt/wp-content/uploads/2021/12/1200px-Organismo_Judicial_Guatemala_Logo.svg.png"
+            alt="Logotipo del Organismo Judicial de Guatemala"
+          />
+        </div>
+        <div>
+          <strong>Organismo Judicial</strong>
+          <span>Tablero gerencial de proyectos</span>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <a class="active" href="#resumen">Resumen</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#areas">Areas</a>
+      </nav>
+
+      <div class="project-menu">
+        <span>Libros registrados</span>
+        <div id="sidebarProjects" class="project-menu-list"></div>
+      </div>
+
+      <div class="sidebar-note">
+        <span>Ultima revision</span>
+        <strong id="updatedAt">--</strong>
+      </div>
+    </aside>
+
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Organismo Judicial de Guatemala</p>
+          <h1>Libros de proyectos</h1>
+          <p class="topbar-subtitle">Acceso ejecutivo a libros de Google Sheets y carpetas de Drive.</p>
+        </div>
+        <div class="top-actions">
+          <button id="copyTemplate" class="ghost-button" type="button" title="Copiar formato para agregar libros">
+            Copiar plantilla
+          </button>
+          <a class="primary-button" href="https://drive.google.com" target="_blank" rel="noreferrer">
+            Abrir Drive
+          </a>
+        </div>
+      </header>
+
+      <section id="resumen" class="metrics-grid" aria-label="Resumen de libros">
+        <article class="metric">
+          <span>Total de libros</span>
+          <strong id="totalBooks">0</strong>
+        </article>
+        <article class="metric">
+          <span>Prioridad alta</span>
+          <strong id="highPriority">0</strong>
+        </article>
+        <article class="metric">
+          <span>En seguimiento</span>
+          <strong id="trackingBooks">0</strong>
+        </article>
+        <article class="metric">
+          <span>Areas activas</span>
+          <strong id="activeAreas">0</strong>
+        </article>
+      </section>
+
+      <section class="toolbar" aria-label="Herramientas de busqueda y filtro">
+        <label class="search-box">
+          <span>Buscar</span>
+          <input id="searchInput" type="search" placeholder="Proyecto, responsable, area..." />
+        </label>
+
+        <label class="select-box">
+          <span>Area</span>
+          <select id="areaFilter">
+            <option value="todas">Todas</option>
+          </select>
+        </label>
+
+        <label class="select-box">
+          <span>Estado</span>
+          <select id="statusFilter">
+            <option value="todos">Todos</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="proyectos" class="project-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Acceso rapido</p>
+            <h2>Libros disponibles</h2>
+          </div>
+          <span id="resultCount" class="result-count">0 resultados</span>
+        </div>
+
+        <div id="projectGrid" class="project-grid" aria-live="polite"></div>
+        <p id="emptyState" class="empty-state" hidden>No se encontraron libros con esos filtros.</p>
+      </section>
+
+      <section id="areas" class="area-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Distribucion</p>
+            <h2>Libros por area</h2>
+          </div>
+        </div>
+        <div id="areaGrid" class="area-grid"></div>
+      </section>
+    </main>
+
+    <script src="sheets.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
