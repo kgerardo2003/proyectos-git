@@ -5,12 +5,18 @@ const elements = {
   areaFilter: document.querySelector("#areaFilter"),
   areaGrid: document.querySelector("#areaGrid"),
   copyTemplate: document.querySelector("#copyTemplate"),
+  areaBars: document.querySelector("#areaBars"),
+  dashboardTotal: document.querySelector("#dashboardTotal"),
   emptyState: document.querySelector("#emptyState"),
   highPriority: document.querySelector("#highPriority"),
+  priorityLegend: document.querySelector("#priorityLegend"),
+  priorityPie: document.querySelector("#priorityPie"),
+  priorityPieTotal: document.querySelector("#priorityPieTotal"),
   projectGrid: document.querySelector("#projectGrid"),
   resultCount: document.querySelector("#resultCount"),
   searchInput: document.querySelector("#searchInput"),
   sidebarProjects: document.querySelector("#sidebarProjects"),
+  statusSummary: document.querySelector("#statusSummary"),
   statusFilter: document.querySelector("#statusFilter"),
   totalBooks: document.querySelector("#totalBooks"),
   trackingBooks: document.querySelector("#trackingBooks"),
@@ -45,6 +51,21 @@ function isValidUrl(url, expectedText) {
   return Boolean(url && url.includes(expectedText) && !url.endsWith("/...") && !url.endsWith("/"));
 }
 
+function countBy(key) {
+  return sheets.reduce((accumulator, sheet) => {
+    const value = sheet[key] || "Sin definir";
+    accumulator[value] = (accumulator[value] || 0) + 1;
+    return accumulator;
+  }, {});
+}
+
+function priorityColor(priority) {
+  const normalized = normalize(priority);
+  if (normalized === "alta") return "#a32020";
+  if (normalized === "media") return "#c27a05";
+  return "#0a3a78";
+}
+
 function getSheetPreviewUrl(url) {
   if (!isValidUrl(url, "docs.google.com/spreadsheets")) return "";
 
@@ -66,6 +87,69 @@ function renderMetrics() {
     dateStyle: "medium",
     timeStyle: "short"
   }).format(new Date());
+}
+
+function renderDashboard() {
+  const total = sheets.length || 1;
+  const priorityCounts = countBy("priority");
+  const areaCounts = countBy("area");
+  const statusCounts = countBy("status");
+  let currentPercent = 0;
+
+  const slices = Object.entries(priorityCounts).map(([priority, count]) => {
+    const start = currentPercent;
+    const end = currentPercent + (count / total) * 100;
+    currentPercent = end;
+    return `${priorityColor(priority)} ${start}% ${end}%`;
+  });
+
+  elements.dashboardTotal.textContent = `${sheets.length} proyecto${sheets.length === 1 ? "" : "s"}`;
+  elements.priorityPie.style.background = slices.length
+    ? `conic-gradient(${slices.join(", ")})`
+    : "#edf1f6";
+  elements.priorityPieTotal.textContent = sheets.length;
+
+  elements.priorityLegend.innerHTML = "";
+  Object.entries(priorityCounts)
+    .sort(([a], [b]) => a.localeCompare(b, "es"))
+    .forEach(([priority, count]) => {
+      const item = document.createElement("div");
+      item.className = "legend-item";
+      item.innerHTML = `
+        <span class="legend-dot" style="background:${priorityColor(priority)}"></span>
+        <strong>${priority}</strong>
+        <small>${count}</small>
+      `;
+      elements.priorityLegend.appendChild(item);
+    });
+
+  const maxAreaCount = Math.max(...Object.values(areaCounts), 1);
+  elements.areaBars.innerHTML = "";
+  Object.entries(areaCounts)
+    .sort(([, countA], [, countB]) => countB - countA)
+    .forEach(([area, count]) => {
+      const width = Math.max((count / maxAreaCount) * 100, 8);
+      const item = document.createElement("div");
+      item.className = "bar-item";
+      item.innerHTML = `
+        <div class="bar-label">
+          <span>${area}</span>
+          <strong>${count}</strong>
+        </div>
+        <div class="bar-track"><span style="width:${width}%"></span></div>
+      `;
+      elements.areaBars.appendChild(item);
+    });
+
+  elements.statusSummary.innerHTML = "";
+  Object.entries(statusCounts)
+    .sort(([a], [b]) => a.localeCompare(b, "es"))
+    .forEach(([status, count]) => {
+      const item = document.createElement("div");
+      item.className = "status-pill";
+      item.innerHTML = `<span>${status}</span><strong>${count}</strong>`;
+      elements.statusSummary.appendChild(item);
+    });
 }
 
 function matchesFilters(sheet) {
@@ -196,6 +280,7 @@ async function copyTemplate() {
 function init() {
   fillFilter(elements.areaFilter, uniqueValues("area"));
   fillFilter(elements.statusFilter, uniqueValues("status"));
+  renderDashboard();
   renderMetrics();
   renderSidebarProjects();
   renderProjects();

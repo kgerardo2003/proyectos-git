@@ -55,6 +55,47 @@
         </div>
       </header>
 
+      <section class="dashboard-panel" aria-label="Dashboard grafico de proyectos">
+        <div class="section-heading dashboard-heading">
+          <div>
+            <p class="eyebrow">Dashboard ejecutivo</p>
+            <h2>Resumen grafico de proyectos</h2>
+          </div>
+          <span id="dashboardTotal" class="result-count">0 proyectos</span>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="chart-card">
+            <div class="chart-title">
+              <h3>Prioridad</h3>
+              <span>Distribucion general</span>
+            </div>
+            <div class="priority-chart-wrap">
+              <div id="priorityPie" class="priority-pie" aria-label="Grafica circular por prioridad">
+                <span id="priorityPieTotal">0</span>
+              </div>
+              <div id="priorityLegend" class="chart-legend"></div>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <div class="chart-title">
+              <h3>Proyectos por area</h3>
+              <span>Carga actual por coordinacion o unidad</span>
+            </div>
+            <div id="areaBars" class="bar-list"></div>
+          </article>
+
+          <article class="chart-card">
+            <div class="chart-title">
+              <h3>Estado</h3>
+              <span>Seguimiento operativo</span>
+            </div>
+            <div id="statusSummary" class="status-summary"></div>
+          </article>
+        </div>
+      </section>
+
       <section id="resumen" class="metrics-grid" aria-label="Resumen de libros">
         <article class="metric">
           <span>Total de libros</span>

@@ -2,6 +2,8 @@
 
 Interfaz web estatica para acceder rapido a libros de Google Sheets y carpetas de Google Drive por proyecto, area, responsable, estado y prioridad.
 
+Incluye dashboard superior con grafica circular por prioridad, barras por area y resumen por estado.
+
 ## Como usarlo
 
 1. Abre `index.html` en el navegador.
