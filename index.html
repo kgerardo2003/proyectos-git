@@ -70,8 +70,8 @@
               <h3>Prioridad</h3>
               <span>Distribucion general</span>
             </div>
-            <div class="priority-chart-wrap">
-              <div id="priorityPie" class="priority-pie" aria-label="Grafica circular por prioridad">
+            <div class="donut-chart-wrap">
+              <div id="priorityPie" class="donut-chart" aria-label="Grafica circular por prioridad">
                 <span id="priorityPieTotal">0</span>
               </div>
               <div id="priorityLegend" class="chart-legend"></div>
@@ -83,7 +83,12 @@
               <h3>Proyectos por area</h3>
               <span>Carga actual por coordinacion o unidad</span>
             </div>
-            <div id="areaBars" class="bar-list"></div>
+            <div class="donut-chart-wrap">
+              <div id="areaPie" class="donut-chart" aria-label="Grafica circular por area">
+                <span id="areaPieTotal">0</span>
+              </div>
+              <div id="areaLegend" class="chart-legend"></div>
+            </div>
           </article>
 
           <article class="chart-card">
@@ -91,7 +96,12 @@
               <h3>Estado</h3>
               <span>Seguimiento operativo</span>
             </div>
-            <div id="statusSummary" class="status-summary"></div>
+            <div class="donut-chart-wrap">
+              <div id="statusPie" class="donut-chart" aria-label="Grafica circular por estado">
+                <span id="statusPieTotal">0</span>
+              </div>
+              <div id="statusLegend" class="chart-legend"></div>
+            </div>
           </article>
         </div>
       </section>

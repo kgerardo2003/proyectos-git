@@ -4,8 +4,10 @@ const elements = {
   activeAreas: document.querySelector("#activeAreas"),
   areaFilter: document.querySelector("#areaFilter"),
   areaGrid: document.querySelector("#areaGrid"),
+  areaLegend: document.querySelector("#areaLegend"),
+  areaPie: document.querySelector("#areaPie"),
+  areaPieTotal: document.querySelector("#areaPieTotal"),
   copyTemplate: document.querySelector("#copyTemplate"),
-  areaBars: document.querySelector("#areaBars"),
   dashboardTotal: document.querySelector("#dashboardTotal"),
   emptyState: document.querySelector("#emptyState"),
   highPriority: document.querySelector("#highPriority"),
@@ -16,8 +18,10 @@ const elements = {
   resultCount: document.querySelector("#resultCount"),
   searchInput: document.querySelector("#searchInput"),
   sidebarProjects: document.querySelector("#sidebarProjects"),
-  statusSummary: document.querySelector("#statusSummary"),
   statusFilter: document.querySelector("#statusFilter"),
+  statusLegend: document.querySelector("#statusLegend"),
+  statusPie: document.querySelector("#statusPie"),
+  statusPieTotal: document.querySelector("#statusPieTotal"),
   totalBooks: document.querySelector("#totalBooks"),
   trackingBooks: document.querySelector("#trackingBooks"),
   updatedAt: document.querySelector("#updatedAt")
@@ -66,15 +70,39 @@ function priorityColor(priority) {
   return "#0a3a78";
 }
 
-function getSheetPreviewUrl(url) {
-  if (!isValidUrl(url, "docs.google.com/spreadsheets")) return "";
+function chartColor(index) {
+  const colors = ["#0a3a78", "#2f6fa8", "#8a5a05", "#a32020", "#4d6b2f", "#6f4aa8", "#607080"];
+  return colors[index % colors.length];
+}
 
-  const idMatch = url.match(/\/spreadsheets\/d\/([^/]+)/);
-  const gidMatch = url.match(/[?#&]gid=([0-9]+)/);
-  if (!idMatch) return "";
+function renderDonutChart(counts, pieElement, totalElement, legendElement, colorResolver) {
+  const entries = Object.entries(counts).sort(([a], [b]) => a.localeCompare(b, "es"));
+  const total = entries.reduce((sum, [, count]) => sum + count, 0) || 1;
+  let currentPercent = 0;
 
-  const gid = gidMatch ? `?gid=${gidMatch[1]}` : "";
-  return `https://docs.google.com/spreadsheets/d/${idMatch[1]}/preview${gid}`;
+  const slices = entries.map(([label, count], index) => {
+    const start = currentPercent;
+    const end = currentPercent + (count / total) * 100;
+    currentPercent = end;
+    const color = colorResolver ? colorResolver(label, index) : chartColor(index);
+    return `${color} ${start}% ${end}%`;
+  });
+
+  pieElement.style.background = slices.length ? `conic-gradient(${slices.join(", ")})` : "#edf1f6";
+  totalElement.textContent = entries.reduce((sum, [, count]) => sum + count, 0);
+  legendElement.innerHTML = "";
+
+  entries.forEach(([label, count], index) => {
+    const color = colorResolver ? colorResolver(label, index) : chartColor(index);
+    const item = document.createElement("div");
+    item.className = "legend-item";
+    item.innerHTML = `
+      <span class="legend-dot" style="background:${color}"></span>
+      <strong>${label}</strong>
+      <small>${count}</small>
+    `;
+    legendElement.appendChild(item);
+  });
 }
 
 function renderMetrics() {
@@ -90,66 +118,14 @@ function renderMetrics() {
 }
 
 function renderDashboard() {
-  const total = sheets.length || 1;
   const priorityCounts = countBy("priority");
   const areaCounts = countBy("area");
   const statusCounts = countBy("status");
-  let currentPercent = 0;
-
-  const slices = Object.entries(priorityCounts).map(([priority, count]) => {
-    const start = currentPercent;
-    const end = currentPercent + (count / total) * 100;
-    currentPercent = end;
-    return `${priorityColor(priority)} ${start}% ${end}%`;
-  });
 
   elements.dashboardTotal.textContent = `${sheets.length} proyecto${sheets.length === 1 ? "" : "s"}`;
-  elements.priorityPie.style.background = slices.length
-    ? `conic-gradient(${slices.join(", ")})`
-    : "#edf1f6";
-  elements.priorityPieTotal.textContent = sheets.length;
-
-  elements.priorityLegend.innerHTML = "";
-  Object.entries(priorityCounts)
-    .sort(([a], [b]) => a.localeCompare(b, "es"))
-    .forEach(([priority, count]) => {
-      const item = document.createElement("div");
-      item.className = "legend-item";
-      item.innerHTML = `
-        <span class="legend-dot" style="background:${priorityColor(priority)}"></span>
-        <strong>${priority}</strong>
-        <small>${count}</small>
-      `;
-      elements.priorityLegend.appendChild(item);
-    });
-
-  const maxAreaCount = Math.max(...Object.values(areaCounts), 1);
-  elements.areaBars.innerHTML = "";
-  Object.entries(areaCounts)
-    .sort(([, countA], [, countB]) => countB - countA)
-    .forEach(([area, count]) => {
-      const width = Math.max((count / maxAreaCount) * 100, 8);
-      const item = document.createElement("div");
-      item.className = "bar-item";
-      item.innerHTML = `
-        <div class="bar-label">
-          <span>${area}</span>
-          <strong>${count}</strong>
-        </div>
-        <div class="bar-track"><span style="width:${width}%"></span></div>
-      `;
-      elements.areaBars.appendChild(item);
-    });
-
-  elements.statusSummary.innerHTML = "";
-  Object.entries(statusCounts)
-    .sort(([a], [b]) => a.localeCompare(b, "es"))
-    .forEach(([status, count]) => {
-      const item = document.createElement("div");
-      item.className = "status-pill";
-      item.innerHTML = `<span>${status}</span><strong>${count}</strong>`;
-      elements.statusSummary.appendChild(item);
-    });
+  renderDonutChart(priorityCounts, elements.priorityPie, elements.priorityPieTotal, elements.priorityLegend, priorityColor);
+  renderDonutChart(areaCounts, elements.areaPie, elements.areaPieTotal, elements.areaLegend);
+  renderDonutChart(statusCounts, elements.statusPie, elements.statusPieTotal, elements.statusLegend);
 }
 
 function matchesFilters(sheet) {
@@ -173,18 +149,6 @@ function renderProjects() {
 
   filtered.forEach((sheet) => {
     const card = document.createElement("article");
-    const previewUrl = getSheetPreviewUrl(sheet.url);
-    const preview = previewUrl
-      ? `
-        <div class="sheet-preview">
-          <iframe title="Vista previa de ${sheet.name}" src="${previewUrl}" loading="lazy"></iframe>
-        </div>
-      `
-      : `
-        <div class="sheet-preview unavailable">
-          <span>Vista previa pendiente</span>
-        </div>
-      `;
     const sheetLink = isValidUrl(sheet.url, "docs.google.com/spreadsheets")
       ? `<a class="open-link" href="${sheet.url}" target="_blank" rel="noreferrer">Abrir libro</a>`
       : `<button class="disabled-link" type="button" disabled>Libro pendiente</button>`;
@@ -202,7 +166,6 @@ function renderProjects() {
         <span class="badge ${priorityClass(sheet.priority)}">${sheet.priority}</span>
       </div>
       <p>${sheet.description}</p>
-      ${preview}
       <div class="card-footer">
         <span class="status">${sheet.status}</span>
         <div class="card-actions">
